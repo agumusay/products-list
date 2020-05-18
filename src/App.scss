@@ -160,6 +160,19 @@ h1 {
   display: flex;
   justify-content: space-between;
   width: 30%;
+  a {
+    width: 30%;
+    height: 50px;
+    font-weight: bold;
+    background-color: rgb(65, 138, 221);
+    font-size: 1.1rem;
+    color: white;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    writing-mode: horizontal-tb !important;
+    -webkit-writing-mode: horizontal-tb !important;
+  }
   &-button {
     width: 30%;
     height: 50px;

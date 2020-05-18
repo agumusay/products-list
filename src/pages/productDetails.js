@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -70,7 +69,7 @@ class ProductDetails extends React.Component {
           <div className="btnContainer">
             <div>
               {this.state.prevSlug && (
-                <a href="#" onClick={this.goPrevProduct}>
+                <a href="/#" onClick={this.goPrevProduct}>
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Previous</span>
                 </a>
@@ -78,7 +77,7 @@ class ProductDetails extends React.Component {
             </div>
             <div>
               {this.state.nextSlug && (
-                <a href="#" onClick={this.goNextProduct}>
+                <a href="/#" onClick={this.goNextProduct}>
                   <span>Next</span>
                   <FontAwesomeIcon icon={faArrowRight} />
                 </a>
