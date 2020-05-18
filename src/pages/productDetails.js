@@ -1,68 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
-const ProductDetails = (props) => {
-  let [index, setIndex] = useState(0);
-  const { match, history, productsData } = props;
-  console.log(history);
-  useEffect(() => {
-    const initialProduct = productsData.find((product) => {
-      return product.slug === match.params.slug;
-    });
-    setIndex(productsData.indexOf(initialProduct));
-  }, [match.params.slug, productsData]);
-
-  const goPreviousPage = () => {
-    props.history.goBack();
+class ProductDetails extends React.Component {
+  state = {
+    product: '',
+    nextSlug: '',
+    prevSlug: '',
   };
 
-  const backNForth = (e) => {
-    setIndex(e.currentTarget.name === 'next' ? (index += 1) : (index -= 1));
+  componentDidMount() {
+    let currentProduct = this.props.productsData.find((product) => {
+      return product.slug === this.props.match.params.slug;
+    });
+    let index = this.props.productsData.indexOf(currentProduct);
+    this.setState({
+      product: currentProduct,
+      nextSlug: this.props.productsData[index + 1] && this.props.productsData[index + 1].slug,
+      prevSlug: this.props.productsData[index - 1] && this.props.productsData[index - 1].slug,
+    });
+  }
 
-    history.replace({
-      pathname: `/products/${productsData[index].slug}`,
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.slug !== this.props.match.params.slug) {
+      let currentProduct = this.props.productsData.find((product) => {
+        return product.slug === this.props.match.params.slug;
+      });
+      let index = this.props.productsData.indexOf(currentProduct);
+      this.setState({
+        product: currentProduct,
+        nextSlug: this.props.productsData[index + 1] && this.props.productsData[index + 1].slug,
+        prevSlug: this.props.productsData[index - 1] && this.props.productsData[index - 1].slug,
+      });
+    }
+  }
+  goPreviousPage = () => {
+    this.props.history.goBack();
+  };
+
+  goNextProduct = (e) => {
+    e.preventDefault();
+    this.props.history.replace({
+      pathname: `/products/${this.state.nextSlug}`,
     });
   };
 
-  let product = productsData[index];
-  return (
-    <>
-      <div className="details">
-        <div className="details-title">
-          <button onClick={goPreviousPage} className="details-title-button move">
-            <FontAwesomeIcon icon={faAngleLeft} />
-          </button>
-          <h1 className="details-title-name">{product.name}</h1>
-        </div>
+  goPrevProduct = (e) => {
+    e.preventDefault();
+    this.props.history.replace({
+      pathname: `/products/${this.state.prevSlug}`,
+    });
+  };
 
-        <img src={product.image} alt="" className="details-img" />
-        <p className="details-description">{product.description}</p>
-        <p className="details-price">{`$${product.price}`}</p>
-        <div className="btnContainer">
-          <button
-            name="previous"
-            className="move"
-            onClick={backNForth}
-            disabled={!index > 0 ? true : false}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} />
-            <span>Previous</span>
-          </button>
+  render() {
+    return (
+      <>
+        <div className="details">
+          <div className="details-title">
+            <button onClick={this.goPreviousPage} className="details-title-button move">
+              <FontAwesomeIcon icon={faAngleLeft} />
+            </button>
+            <h1 className="details-title-name">{this.state.product.name}</h1>
+          </div>
 
-          <button
-            name="next"
-            className="move"
-            onClick={backNForth}
-            disabled={index < productsData.length - 1 ? false : true}
-          >
-            <span>Next</span>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </button>
+          <img src={this.state.product.image} alt="" className="details-img" />
+          <p className="details-description">{this.state.product.description}</p>
+          <p className="details-price">{`$${this.state.product.price}`}</p>
+          <div className="btnContainer">
+            <div>
+              {this.state.prevSlug && (
+                <a href="#" onClick={this.goPrevProduct}>
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                  <span>Previous</span>
+                </a>
+              )}
+            </div>
+            <div>
+              {this.state.nextSlug && (
+                <a href="#" onClick={this.goNextProduct}>
+                  <span>Next</span>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </a>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </>
-  );
-};
+      </>
+    );
+  }
+}
 
 export default ProductDetails;

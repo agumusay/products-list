@@ -1,29 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
+const titleVariants = {
+  initial: {
+    y: 150,
+  },
+  in: {
+    y: 0,
+  },
+  out: {
+    y: 150,
+  },
+};
 const Home = (props) => {
   const topProducts = props.productsData.sort((a, b) => b.price - a.price).slice(0, 4);
-  console.log(topProducts);
   return (
-    <section className="home">
+    <motion.div className="home" initial="initial" animate="in" exit="out" variants={titleVariants}>
       <div className="home-header">
-        <h2 className="home-header-title">Welcome, visitor!</h2>
-        <Link to="/products">
+        <motion.h2 className="home-header-title">Welcome, visitor!</motion.h2>
+        <NavLink to="/products">
           <button className="home-header-nav">Go To Products</button>
-        </Link>
+        </NavLink>
       </div>
 
       <ul className="top-products">
-        {topProducts.map((product) => {
+        {topProducts.map(({ id, name, price, slug }) => {
           return (
-            <li className="top" key={product.id}>
-              <h1 className="top-title">{product.name}</h1>
-              <div className="top-price">{`$${product.price}`}</div>
-            </li>
+            <NavLink to={`/products/${slug}`} key={id}>
+              <li className="top">
+                <h1 className="top-title">{name}</h1>
+                <div className="top-price">{`$${price}`}</div>
+              </li>
+            </NavLink>
           );
         })}
       </ul>
-    </section>
+    </motion.div>
   );
 };
 
