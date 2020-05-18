@@ -155,3 +155,17 @@ h1 {
     }
   }
 }
+
+.sort {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+  &-button {
+    width: 30%;
+    height: 50px;
+    font-weight: bold;
+    background-color: rgb(65, 138, 221);
+    font-size: 1.1rem;
+    color: white;
+  }
+}

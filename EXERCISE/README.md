@@ -1,45 +1,29 @@
-# Products list: params
+# Products list: location
 
 Create two pages: home (`/`) and products (`/products`).
 
-The home page should only display a greeting: `Welcome, visitor!` and a link to the products page.
+The home page should only display a greeting: `Welcome, visitor!` and a link to the producst page.
 
-![example home page](example-home.png)
+![example home](example-home.png)
 
-The products page should display a list of products. Find the list of products in the `data` folder. 
+The products page should display a list of products. Find the list of products in the `data` folder.
 
-![example products list](example-producst-list.png)
+![example products](example-products-list.png)
 
-There is a back button next to the page title that brings the user back to the home page.
+On the products pages there are 3 buttons: reset, sort ascending, sort descending.
 
-1. Details page
+On click on the sort ascending button the URL should update to `http://localhost:3000/products?sort=asc` and the list of products should be ordered by price in ascending order (from lowest to highest).
 
-Next, let's create a details page for each product. On click on product item in the list, a details page is displayed.
-The details page contains the title, the long description, the product image and the price (correctly formatted).
-Back button should return to the previous page, which will be the product page (for now).
+![example asc](example-asc.png)
 
-![example product details page](example-product-details.png)
+On click on the sort descending button the URL should update to `http://localhost:3000/products?sort=dsc` and the list of products should be ordered by price in descending order (from highest to lowest).
 
-2. Top 4 products
+![example dsc](example-dsc.png)
 
-On the home page display the 4 products with the highest price. On click on the products, the user should go to the details page of this product.
+In addition, there is a label next to the page title, that indicates the sorting order. Next to the price column label an arrow appears to indicate there is sorting order applied.
 
-If the user has come from the home page from a top product to the product details page and hits the back button next to the product title, the user should go back to the home page.
+If the URL has no sorting related query params (`http://localhost:3000/products`), the products list should not be sorted in any way, they should be back to the initial order. Also, no label is displayed next to the page title, and no arrow is displayed next to the price column label.
 
-If the user came from the products list page to the product details page, they should go back to the products list.
+Last there is a back button next to the page title that brings the user back to the home page.
 
-![example top 4 products](example-top-4.png)
-
-3. Next / prev navigation
-
-Add next product and previous product links at the bottom of the product details page.
-
-If this is the last product, no next button should be displayed. If this is the first product, no prev button should be displayed.
-
-On click on the back button, after pressing either prev or next buttons, the user should go to the page they came from first.
-
-![example product details with navigation](example-product-details-navigation.png)
-
-## Final version:
-
-![example](example.gif)
+Note: sorting should not be part of the history.

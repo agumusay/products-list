@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 const list = {
   visible: {
@@ -26,6 +26,15 @@ const item = {
 const Products = ({ match, productsData }) => {
   return (
     <>
+      <div className="sort">
+        <button className="sort-button reset">Reset</button>
+        <button className="sort-button">
+          Sort <FontAwesomeIcon icon={faArrowUp} />
+        </button>
+        <button className="sort-button">
+          Sort <FontAwesomeIcon icon={faArrowDown} />
+        </button>
+      </div>
       <motion.ul className="products" initial="hidden" animate="visible" variants={list}>
         <motion.div className="title" variants={item}>
           <Link to="/">
