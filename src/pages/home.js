@@ -14,7 +14,10 @@ const titleVariants = {
   },
 };
 const Home = (props) => {
-  const topProducts = props.productsData.sort((a, b) => b.price - a.price).slice(0, 4);
+  const topProducts = []
+    .concat(props.productsData)
+    .sort((a, b) => b.price - a.price)
+    .slice(0, 4);
   return (
     <motion.div className="home" initial="initial" animate="in" exit="out" variants={titleVariants}>
       <div className="home-header">

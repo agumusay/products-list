@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-import products from '../data/products.json';
 
 const list = {
   visible: {
@@ -26,13 +25,12 @@ const item = {
 };
 class Products extends React.Component {
   state = {
-    initialArray: [],
-    productsArray: [],
+    productsData: [],
   };
 
   componentDidMount() {
     this.setState({
-      productsArray: products,
+      productsData: this.props.productsData,
     });
   }
 
@@ -41,9 +39,9 @@ class Products extends React.Component {
       pathname: '/products',
       search: '?sort=asc',
     });
-    const ascending = Array.from(this.props.productsData).sort((a, b) => b.price - a.price);
+    const ascending = [...this.props.productsData].sort((a, b) => a.price - b.price);
     this.setState({
-      productsArray: ascending,
+      productsData: ascending,
     });
   };
   sortDescending = () => {
@@ -51,9 +49,9 @@ class Products extends React.Component {
       pathname: '/products',
       search: '?sort=dsc',
     });
-    const descending = Array.from(this.props.productsData).sort((a, b) => a.price - b.price);
+    const descending = [...this.props.productsData].sort((a, b) => b.price - a.price);
     this.setState({
-      productsArray: descending,
+      productsData: descending,
     });
   };
 
@@ -63,12 +61,11 @@ class Products extends React.Component {
       search: '',
     });
     this.setState({
-      productsArray: products,
+      productsData: this.props.productsData,
     });
   };
 
   render() {
-    console.log(this.state.productsArray);
     return (
       <>
         <div className="sort">
@@ -89,14 +86,32 @@ class Products extends React.Component {
                 <FontAwesomeIcon icon={faAngleLeft} />
               </button>
             </Link>
-            <h1>Products</h1>
+            <h1>
+              Products
+              {this.props.location.search === '?sort=asc' ? (
+                <span>Ascending</span>
+              ) : this.props.location.search === '?sort=dsc' ? (
+                <span>Descending</span>
+              ) : (
+                ''
+              )}
+            </h1>
           </motion.div>
           <div className="products-header">
             <div>Name</div>
             <div>Description</div>
-            <div>Price</div>
+            <div>
+              Price
+              {this.props.location.search === '?sort=asc' ? (
+                <FontAwesomeIcon icon={faArrowUp} />
+              ) : this.props.location.search === '?sort=dsc' ? (
+                <FontAwesomeIcon icon={faArrowDown} />
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-          {this.state.productsArray.map(({ name, price, id, slug, shortDescription }) => {
+          {this.state.productsData.map(({ name, price, id, slug, shortDescription }) => {
             return (
               <Link to={`/products/${slug}`} key={id}>
                 <motion.li

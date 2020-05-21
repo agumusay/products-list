@@ -7,6 +7,18 @@
   padding: 20px 0px;
 }
 .products {
+  span {
+    font-size: 0.8rem;
+    color: gray;
+    background-color: rgb(140, 201, 252);
+    font-weight: normal;
+    height: 21px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 3px 7px;
+    border-radius: 50vh;
+    margin-left: 5px;
+  }
   &-header {
     display: flex;
     justify-content: space-between;
@@ -160,6 +172,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   width: 30%;
+  margin: 50px;
   a {
     width: 30%;
     height: 50px;
@@ -180,5 +193,10 @@ h1 {
     background-color: rgb(65, 138, 221);
     font-size: 1.1rem;
     color: white;
+  }
+  .reset {
+    color: rgb(65, 138, 221);
+    background-color: white;
+    border: 2px solid rgb(65, 138, 221);
   }
 }
