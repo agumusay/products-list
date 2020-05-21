@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import products from '../data/products.json';
 
 const list = {
   visible: {
@@ -31,31 +32,8 @@ class Products extends React.Component {
 
   componentDidMount() {
     this.setState({
-      initialArray: this.props.productsData,
-      productsArray: Array.from(this.props.productsData),
+      productsArray: products,
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.location.search !== this.props.location.search) {
-      if (this.props.location.search === '?sort=asc') {
-        const ascending = Array.from(this.props.productsData).sort((a, b) => a.price - b.price);
-        this.setState({
-          productsArray: ascending,
-        });
-      }
-      if (this.props.location.search === '?sort=dsc') {
-        const descending = Array.from(this.props.productsData).sort((a, b) => b.price - a.price);
-        this.setState({
-          productsArray: descending,
-        });
-      }
-      if (this.props.location.search === '') {
-        this.setState({
-          productsArray: this.state.initialArray,
-        });
-      }
-    }
   }
 
   sortAscending = () => {
@@ -63,11 +41,19 @@ class Products extends React.Component {
       pathname: '/products',
       search: '?sort=asc',
     });
+    const ascending = Array.from(this.props.productsData).sort((a, b) => b.price - a.price);
+    this.setState({
+      productsArray: ascending,
+    });
   };
   sortDescending = () => {
     this.props.history.replace({
       pathname: '/products',
       search: '?sort=dsc',
+    });
+    const descending = Array.from(this.props.productsData).sort((a, b) => a.price - b.price);
+    this.setState({
+      productsArray: descending,
     });
   };
 
@@ -76,9 +62,13 @@ class Products extends React.Component {
       pathname: '/products',
       search: '',
     });
+    this.setState({
+      productsArray: products,
+    });
   };
 
   render() {
+    console.log(this.state.productsArray);
     return (
       <>
         <div className="sort">
