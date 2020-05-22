@@ -1,24 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
-const titleVariants = {
-  initial: {
-    y: 150,
-  },
-  in: {
-    y: 0,
-  },
-  out: {
-    y: 150,
-  },
-};
 const Home = (props) => {
   const topProducts = [...props.productsData].sort((a, b) => b.price - a.price).slice(0, 4);
   return (
-    <motion.div className="home" initial="initial" animate="in" exit="out" variants={titleVariants}>
+    <div className="home">
       <div className="home-header">
-        <motion.h2 className="home-header-title">Welcome, visitor!</motion.h2>
+        <h2 className="home-header-title">Welcome, visitor!</h2>
         <NavLink to="/products">
           <button className="home-header-nav">Go To Products</button>
         </NavLink>
@@ -36,7 +24,7 @@ const Home = (props) => {
           );
         })}
       </ul>
-    </motion.div>
+    </div>
   );
 };
 
