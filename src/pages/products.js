@@ -6,13 +6,15 @@ import queryString from 'query-string';
 
 class Products extends React.Component {
   state = {
-    productsData: [],
+    productsArray: [],
+    sortedProducts: [],
     search: '',
   };
 
   componentDidMount() {
     this.setState({
-      productsData: [...this.props.productsData],
+      productsArray: [...this.props.productsData],
+      sortedProducts: [...this.props.productsData],
     });
   }
 
@@ -20,7 +22,7 @@ class Products extends React.Component {
     if (prevState.search !== this.state.search) {
       if (!this.state.search) {
         this.setState({
-          productsData: [...this.state.productsData],
+          productsArray: [...this.state.sortedProducts],
         });
       }
     }
@@ -28,7 +30,8 @@ class Products extends React.Component {
 
   sortAscending = () => {
     this.setState({
-      productsData: this.state.productsData.slice().sort((a, b) => a.price - b.price),
+      productsArray: this.state.productsArray.slice().sort((a, b) => a.price - b.price),
+      sortedProducts: this.state.sortedProducts.slice().sort((a, b) => a.price - b.price),
     });
     this.props.history.replace({
       pathname: '/products',
@@ -37,7 +40,8 @@ class Products extends React.Component {
   };
   sortDescending = () => {
     this.setState({
-      productsData: this.state.productsData.slice().sort((a, b) => b.price - a.price),
+      productsArray: this.state.productsArray.slice().sort((a, b) => b.price - a.price),
+      sortedProducts: this.state.sortedProducts.slice().sort((a, b) => b.price - a.price),
     });
     this.props.history.replace({
       pathname: '/products',
@@ -48,17 +52,19 @@ class Products extends React.Component {
   onChangeHandler = (e) => {
     this.setState({
       search: e.target.value,
-      productsData: e.target.value
-        ? this.props.productsData.filter((product) => {
+      productsArray: e.target.value
+        ? this.state.sortedProducts.filter((product) => {
             return String(product.name.toLowerCase()).startsWith(e.target.value);
           })
-        : this.state.productsData,
+        : this.state.productsArray,
     });
   };
 
   reset = () => {
     this.setState({
       search: '',
+      productsArray: [...this.props.productsData],
+      sortedProducts: [...this.props.productsData],
     });
     this.props.history.replace({
       pathname: '/products',
@@ -123,7 +129,7 @@ class Products extends React.Component {
               )}
             </div>
           </div>
-          {this.state.productsData.map(({ name, price, id, slug, shortDescription }) => {
+          {this.state.productsArray.map(({ name, price, id, slug, shortDescription }) => {
             return (
               <Link to={`/products/${slug}`} key={id}>
                 <li className="product" key={id}>
