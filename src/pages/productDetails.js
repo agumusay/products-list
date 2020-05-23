@@ -9,29 +9,24 @@ class ProductDetails extends React.Component {
     prevSlug: '',
   };
 
-  componentDidMount() {
-    let currentProduct = this.props.productsData.find((product) => {
+  findCorrectProducts = (array) => {
+    let currentProduct = array.find((product) => {
       return product.slug === this.props.match.params.slug;
     });
-    let index = this.props.productsData.indexOf(currentProduct);
+    let index = array.indexOf(currentProduct);
     this.setState({
       product: currentProduct,
-      nextSlug: this.props.productsData[index + 1] && this.props.productsData[index + 1].slug,
-      prevSlug: this.props.productsData[index - 1] && this.props.productsData[index - 1].slug,
+      nextSlug: array[index + 1] && array[index + 1].slug,
+      prevSlug: array[index - 1] && array[index - 1].slug,
     });
+  };
+  componentDidMount() {
+    this.findCorrectProducts(this.props.productsData);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.slug !== this.props.match.params.slug) {
-      let currentProduct = this.props.productsData.find((product) => {
-        return product.slug === this.props.match.params.slug;
-      });
-      let index = this.props.productsData.indexOf(currentProduct);
-      this.setState({
-        product: currentProduct,
-        nextSlug: this.props.productsData[index + 1] && this.props.productsData[index + 1].slug,
-        prevSlug: this.props.productsData[index - 1] && this.props.productsData[index - 1].slug,
-      });
+      this.findCorrectProducts(this.props.productsData);
     }
   }
   goPreviousPage = () => {

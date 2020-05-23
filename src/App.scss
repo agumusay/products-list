@@ -76,6 +76,18 @@
     font-weight: bold;
     font-size: 1.5rem;
   }
+  a {
+    font-size: 1.5rem;
+    color: white;
+  }
+  a:active .fa-w-14:first-child {
+    transform: translateX(-10px);
+    color: rgb(255, 153, 0);
+  }
+  a:active .fa-w-14:last-child {
+    transform: translateX(10px);
+    color: rgb(255, 153, 0);
+  }
 }
 
 .move {
@@ -209,7 +221,7 @@ label {
 }
 #filter {
   border: 2px solid rgb(65, 138, 221);
-  width: 35%;
-  height: 30px;
+  width: 30%;
+  height: 2.5vw;
   margin: 10px;
 }
