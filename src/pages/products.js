@@ -16,75 +16,46 @@ const listItemVariants = {
   hidden: { opacity: 0, y: -100 },
 };
 
+const sortProducts = (products, sortingOrder) => {
+  if (sortingOrder === 'asc') return [...products].sort((a, b) => a.price - b.price);
+  if (sortingOrder === 'dsc') return [...products].sort((a, b) => b.price - a.price);
+  return [...products];
+};
 class Products extends React.Component {
   state = {
-    productsArray: [],
-    sortedProducts: [],
-    search: '',
+    initialArray: [...this.props.productsData],
+    productsArray: [...this.props.productsData],
+    filterTerm: '',
   };
 
   componentDidMount() {
-    const parse = queryString.parse(this.props.location.search);
-
+    let parse = queryString.parse(this.props.location.search);
     this.setState({
-      productsArray:
-        parse.sort === 'asc'
-          ? [...this.props.productsData].sort((a, b) => a.price - b.price)
-          : parse.sort === 'dsc'
-          ? [...this.props.productsData].sort((a, b) => b.price - a.price)
-          : this.props.productsData,
-      sortedProducts: [...this.props.productsData],
+      productsArray: sortProducts(this.state.productsArray, parse.sort),
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.search !== this.state.search) {
-      if (!this.state.search) {
-        this.setState({
-          productsArray: [...this.state.sortedProducts],
-        });
-      }
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.search !== this.props.location.search) {
+      let parse = queryString.parse(this.props.location.search);
+      this.setState({
+        productsArray: parse.sort
+          ? sortProducts(this.state.productsArray, parse.sort)
+          : this.state.initialArray,
+      });
     }
   }
 
-  sortAscending = () => {
-    this.setState({
-      productsArray: this.state.productsArray.slice().sort((a, b) => a.price - b.price),
-      sortedProducts: this.state.sortedProducts.slice().sort((a, b) => a.price - b.price),
-    });
+  setSortingOrder = (order = '') => {
     this.props.history.replace({
-      search: '?sort=asc',
-    });
-  };
-  sortDescending = () => {
-    this.setState({
-      productsArray: this.state.productsArray.slice().sort((a, b) => b.price - a.price),
-      sortedProducts: this.state.sortedProducts.slice().sort((a, b) => b.price - a.price),
-    });
-    this.props.history.replace({
-      search: '?sort=dsc',
+      pathname: '/products',
+      search: order ? `?sort=${order}` : '',
     });
   };
 
   onChangeHandler = (e) => {
     this.setState({
-      search: e.target.value,
-      productsArray: e.target.value
-        ? this.state.sortedProducts.filter((product) => {
-            return String(product.name.toLowerCase()).includes(e.target.value);
-          })
-        : this.state.productsArray,
-    });
-  };
-
-  reset = () => {
-    this.setState({
-      search: '',
-      productsArray: [...this.props.productsData],
-      sortedProducts: [...this.props.productsData],
-    });
-    this.props.history.replace({
-      search: '',
+      filterTerm: e.target.value,
     });
   };
 
@@ -97,7 +68,7 @@ class Products extends React.Component {
           <motion.button
             name="reset"
             className="sort-button reset"
-            onClick={this.reset}
+            onClick={() => this.setSortingOrder()}
             initial={{ translateY: -100 }}
             animate={{ translateY: 0 }}
             transition={{ duration: 1 }}
@@ -107,7 +78,7 @@ class Products extends React.Component {
           <motion.button
             name="asc"
             className="sort-button"
-            onClick={this.sortAscending}
+            onClick={() => this.setSortingOrder('asc')}
             initial={{ translateX: -100 }}
             animate={{ translateX: 0 }}
             transition={{ duration: 0.7 }}
@@ -115,9 +86,9 @@ class Products extends React.Component {
             Sort <FontAwesomeIcon icon={faArrowUp} />
           </motion.button>
           <motion.button
-            name="desc"
+            name="dsc"
             className="sort-button"
-            onClick={this.sortDescending}
+            onClick={() => this.setSortingOrder('dsc')}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.7 }}
@@ -167,28 +138,36 @@ class Products extends React.Component {
             </div>
           </div>
 
-          {this.state.productsArray.map(({ name, price, id, slug, shortDescription }, i) => {
-            return (
-              <Link to={`/products/${slug}`} key={id}>
-                <motion.li
-                  className="product"
-                  whileHover={{
-                    boxShadow: '0px 0px 5px gray',
-                    backgroundColor: 'rgb(128, 128, 128)',
-                    color: 'rgb(255, 255, 255)',
-                  }}
-                  custom={i}
-                  initial="hidden"
-                  animate="visible"
-                  variants={listItemVariants}
-                >
-                  <div className="product-name">{name}</div>
-                  <div className="product-description">{shortDescription}</div>
-                  <div className="product-price">{`$ ${price}`}</div>
-                </motion.li>
-              </Link>
-            );
-          })}
+          {this.state.productsArray
+            .filter(
+              (product) =>
+                product.name.toLowerCase().includes(this.state.filterTerm.toLowerCase()) ||
+                product.shortDescription
+                  .toLowerCase()
+                  .includes(this.state.filterTerm.toLowerCase()),
+            )
+            .map(({ name, price, id, slug, shortDescription }, i) => {
+              return (
+                <Link to={`/products/${slug}`} key={id}>
+                  <motion.li
+                    className="product"
+                    whileHover={{
+                      boxShadow: '0px 0px 5px gray',
+                      backgroundColor: 'rgb(128, 128, 128)',
+                      color: 'rgb(255, 255, 255)',
+                    }}
+                    custom={i}
+                    initial="hidden"
+                    animate="visible"
+                    variants={listItemVariants}
+                  >
+                    <div className="product-name">{name}</div>
+                    <div className="product-description">{shortDescription}</div>
+                    <div className="product-price">{`$ ${price}`}</div>
+                  </motion.li>
+                </Link>
+              );
+            })}
         </motion.ul>
       </>
     );
