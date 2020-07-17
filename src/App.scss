@@ -171,6 +171,8 @@
 					width: 49%;
 					height: 100%;
 					border-radius: 0.5rem;
+					object-fit: cover;
+					object-position: bottom;
 				}
 				&-title {
 					margin-bottom: 10px;
